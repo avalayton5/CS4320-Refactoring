@@ -8,25 +8,24 @@
 - xUnit test framework (restored automatically by `dotnet test`; no manual installs)
 - Git, for the commit history
 
-## Part 1
-1. Comment and syntax errors: comment states "every ten comedy attendees," but the code divides by 5. Also, there is a stray semicolon at the end of the credits line.
-2. One method for calculating, tracking, and formatting: can be broken into several smaller functions to make the code cleaner and less confusing.
-3. Switch on play.Type: makes it difficult to add new play types, and the type is checked in two different places, so adding "historical" means finding and editing both.
-
 ### Commands
 
 ```
-cd csharp
 dotnet build
 dotnet test
 ```
 
 The first run downloads NuGet packages, so it may take a minute. A successful run ends with a "Test summary" line showing zero failures.
 
+## Part 1
+1. Comment and syntax errors: comment states "every ten comedy attendees," but the code divides by 5. Also, there is a stray semicolon at the end of the credits line.
+2. One method for calculating, tracking, and formatting: can be broken into several smaller functions to make the code cleaner and less confusing.
+3. Switch on play.Type: makes it difficult to add new play types, and the type is checked in two different places, so adding "historical" means finding and editing both.
+
 ## Test Results
 
 ### Initial results
-Command: `dotnet test` in the `csharp` folder, on the unmodified starter code, .NET 10.0.
+Command: `dotnet test` on the unmodified starter code, .NET 10.0.
 
 ```
 Test summary: total: 2, failed: 0, succeeded: 2, skipped: 0, duration: 1.8s
@@ -48,7 +47,7 @@ Build succeeded in 2.0s
 - `ComedyAtAudience21AddsFlatFeeAndPerPersonCharge`
   - Comedy at 21 -> one person over the threshold triggers the flat fee. Expected -> $300 + $100 + $5 x 1 + $3 x 21 = $468.00; credits = 21/5 = 4 (rounded down)
 
-These two tests passed against the original code before refactoring and still pass after.
+These two tests passed against the original code (baseline commit `425de43`: total 4, failed 0) before refactoring and still pass after.
 
 ## Part 4 Tests
 - `HistoricalAtAudience35MatchesExample`: $725.00 and 7 credits, the example from the assignment
