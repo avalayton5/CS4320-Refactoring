@@ -30,8 +30,7 @@ The first run downloads NuGet packages, so it may take a minute. A successful ru
     Separate pricing from statement building so Print doesn't mix the two. Verified with dotnet test and 2/2 passing
 
 2. Move volume credit calculation into VolumeCreditsFor
-    Gives credit rules their own method away from the loop. Verified with d
-    otnet test, 2/2 successes
+    Gives credit rules their own method away from the loop. Verified with dotnet test, 2/2 successes
 
 3. Separate calculation from formatting
     Credit rules get their own method, and CreateStatementData does the math and RenderPlainText just formats. Verified with dotnet test, and 2/2 succeeded
