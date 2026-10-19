@@ -14,7 +14,6 @@
 3. Switch on play.Type: makes it difficult to add new play types, and the type is checked in two different places, so adding "historical" means finding and editing both.
 
 ### Commands
-From the repository root:
 
 ```
 cd csharp
@@ -26,28 +25,32 @@ The first run downloads NuGet packages, so it may take a minute. A successful ru
 
 ## Test Results
 
-### Initial results (before any changes)
+### Initial results
 Command: `dotnet test` in the `csharp` folder, on the unmodified starter code, .NET 10.0.
 
 ```
 Test summary: total: 2, failed: 0, succeeded: 2, skipped: 0, duration: 1.8s
 ```
 
-### Final results (after refactoring, new tests, and the historical extension)
+### Final results
 Command: `dotnet test`
 
 ```
-[PASTE FINAL TEST SUMMARY HERE]
+Test summary: total: 7, failed: 0, succeeded: 7, skipped: 0, duration: 0.9s
+Build succeeded in 2.0s
 ```
 
 ### New tests
 
-**Tests for existing behavior (Part 3)**
-- `[TestName1]`: [What input it uses, which rule or boundary it checks, and why the supplied tests did not cover it.]
-- `[TestName2]`: [Same.]
+## Part 3
+- `ComedyAtAudience20HasNoExtraCharge`
+  - Comedy at exactly 20 -> the extra $100 + $5/person applies only above 20. Expected-> $300 + $3 x 20 = $360.00; credits = 20/5 = 4.
+- `ComedyAtAudience21AddsFlatFeeAndPerPersonCharge`
+  - Comedy at 21 -> one person over the threshold triggers the flat fee. Expected -> $300 + $100 + $5 x 1 + $3 x 21 = $468.00; credits = 21/5 = 4 (rounded down)
 
 These two tests passed against the original code before refactoring and still pass after.
 
-**Tests for the historical play type (Part 4)**
-- `[TestName3]`: [Example: audience of 35 gives $725 and 7 credits.]
-- `[TestName4]`: [Boundary case, such as an audience of exactly 20 or 21.]
+## Part 4 Tests
+- `HistoricalAtAudience35MatchesExample`: $725.00 and 7 credits, the example from the assignment
+- `HistoricalAtAudience20HasNoSurcharge`: boundary; $500.00 and 4 credits
+- `HistoricalAtAudience21AddsSurchargeForOnePerson`: boundary; $515.00 and 4 credits
