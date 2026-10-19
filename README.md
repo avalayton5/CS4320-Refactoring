@@ -22,7 +22,33 @@ The first run downloads NuGet packages, so it may take a minute. A successful ru
 2. One method for calculating, tracking, and formatting: can be broken into several smaller functions to make the code cleaner and less confusing.
 3. Switch on play.Type: makes it difficult to add new play types, and the type is checked in two different places, so adding "historical" means finding and editing both.
 
-## Test Results
+## Part 2
+
+### Git Log
+
+1. Move large calculation into AmountFor
+    Separate pricing from statement building so Print doesn't mix the two. Verified with dotnet test and 2/2 passing
+
+2. Move volume credit calculation into VolumeCreditsFor
+    Gives credit rules their own method away from the loop. Verified with d
+    otnet test, 2/2 successes
+
+3. Separate calculation from formatting
+    Credit rules get their own method, and CreateStatementData does the math and RenderPlainText just formats. Verified with dotnet test, and 2/2 succeeded
+
+4. add separate classes to perform the calculations
+    Each play type has its own charge and credit rules, the type is checked in one method and a new type only needs a new class. Verified with dotnet test, 2/2 passed
+
+5. Removes switch and type check from AmountFor and VolumeCreditsFor.
+     Type is checked only in PerformanceCalculator.Create. Verified with dotnet test, 2/2 pass
+
+6. Replace original with polymorphism, use the calculators in StatementPrinter
+
+7. Add boundary tests for comedy charges with audience 20 and 21
+    Covers >20 threshold and rounding. Verified with dotnet test and 4/4 now passing
+
+8. add historical play type
+    New HistoricalCalculator plus a case in PerformanceCalculator.Create. Tests cover the example in the assignment plus the boundary with an audience of 20 and 21. Verified with dotnet test and 7/7 succeeded
 
 ### Initial results
 Command: `dotnet test` on the unmodified starter code, .NET 10.0.
@@ -38,6 +64,7 @@ Command: `dotnet test`
 Test summary: total: 7, failed: 0, succeeded: 7, skipped: 0, duration: 0.9s
 Build succeeded in 2.0s
 ```
+
 
 ### New tests
 
