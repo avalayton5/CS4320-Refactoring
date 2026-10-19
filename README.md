@@ -65,9 +65,6 @@ Test summary: total: 7, failed: 0, succeeded: 7, skipped: 0, duration: 0.9s
 Build succeeded in 2.0s
 ```
 
-
-### New tests
-
 ## Part 3
 - `ComedyAtAudience20HasNoExtraCharge`
   - Comedy at exactly 20 -> the extra $100 + $5/person applies only above 20. Expected-> $300 + $3 x 20 = $360.00; credits = 20/5 = 4.
