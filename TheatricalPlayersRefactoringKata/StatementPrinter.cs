@@ -15,6 +15,7 @@ public class StatementPrinter(Dictionary<string, Play> plays)
         return RenderPlainText(data);
     }
 
+    //all calculation, no formatting, builds data that any renderer can use
     private StatementData CreateStatementData(Invoice invoice)
     {
         var summaries = new List<PerformanceSummary>();
@@ -34,6 +35,7 @@ public class StatementPrinter(Dictionary<string, Play> plays)
             summaries.Sum(p => p.VolumeCredits));
     }
 
+    //formatting only, no calculations
     private static string RenderPlainText(StatementData data)
     {
         var cultureInfo = new CultureInfo("en-US");

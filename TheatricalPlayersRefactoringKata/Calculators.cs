@@ -2,6 +2,7 @@ using System;
 
 namespace TheatricalPlayersRefactoringKata;
 
+//each play type gets its own subclass holding its charge and credit rules
 public abstract class PerformanceCalculator(Performance perf, Play play)
 {
     protected Performance Perf {get; } = perf;
@@ -9,8 +10,12 @@ public abstract class PerformanceCalculator(Performance perf, Play play)
 
     public abstract int Amount {get;}
 
+    //default credit rule
+    //subclasses override this when their rule is different
     public virtual int VolumeCredits => Math.Max(Perf.Audience - 30, 0);
 
+    //only place that checks the play type
+    //adding a new type adds a new subclass and one case here
     public static PerformanceCalculator Create(Performance perf, Play play)
     {
         switch(play.Type)
@@ -27,6 +32,7 @@ public abstract class PerformanceCalculator(Performance perf, Play play)
     }
 }
 
+//$400 base, plus $10 per attendee beyond 30
 public class TragedyCalculator(Performance perf, Play play) : PerformanceCalculator(perf, play)
 {
     public override int Amount
@@ -43,6 +49,7 @@ public class TragedyCalculator(Performance perf, Play play) : PerformanceCalcula
     }
 }
 
+//$300 base, plus a flat $100 and $5 per attendee beyond 20, plus $3 per attendee regardless of size
 public class ComedyCalculator(Performance perf, Play play) : PerformanceCalculator(perf, play)
 {
     public override int Amount
@@ -61,6 +68,7 @@ public class ComedyCalculator(Performance perf, Play play) : PerformanceCalculat
     public override int VolumeCredits => base.VolumeCredits + Perf.Audience / 5;
 }
 
+// $500 base, plus $15 per attendee beyond 20
 public class HistoricalCalculator(Performance perf, Play play) : PerformanceCalculator(perf, play)
 {
     public override int Amount

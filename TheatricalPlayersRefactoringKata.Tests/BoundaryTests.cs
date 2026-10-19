@@ -35,7 +35,7 @@ public class BoundaryTests
 
     //35 people = $500 + $15 x 15 = $725, credits = 35/5 = 7
     [Fact]
-    public void HistoricalAtAudience35MatchesSpecExample()
+    public void HistoricalAtAudience35MatchesExample()
     {
         var result = PrintFor("historical", 35);
         Assert.Contains("$725.00", result);
