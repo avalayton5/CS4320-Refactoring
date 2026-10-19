@@ -19,12 +19,7 @@ public class StatementPrinter(Dictionary<string, Play> plays)
         {
             var play = _plays[perf.PlayID];
             var thisAmount = AmountFor(perf, play);
-            
-            // add volume credits
-            volumeCredits += Math.Max(perf.Audience - 30, 0);
-            // add extra credit for every ten comedy attendees
-            if ("comedy" == play.Type) volumeCredits += perf.Audience / 5;;
-
+            var volumeCredits = VolumeCreditsFor(perf, play);
             // print line for this order
             result +=$"  {play.Name}: {(thisAmount / 100m).ToString("C", cultureInfo)} ({perf.Audience} seats)\n";
             totalAmount += thisAmount;
@@ -56,5 +51,13 @@ public class StatementPrinter(Dictionary<string, Play> plays)
                 throw new Exception("unknown type: " + play.Type);
         }
         return result;
+    }
+
+    private int VolumeCreditsFor(Performance perf, Play play)
+    {
+        // add volume credits
+        var result += Math.Max(perf.Audience - 30, 0);
+        // add extra credit for every five comedy attendees
+        if ("comedy" == play.Type) result += perf.Audience / 5;
     }
 }
