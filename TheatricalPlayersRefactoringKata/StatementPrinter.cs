@@ -20,12 +20,12 @@ public class StatementPrinter(Dictionary<string, Play> plays)
         var summaries = new List<PerformanceSummary>();
         foreach (var perf in invoice.Performances)
         {
-            var play = _plays[perf.PlayID];
+            var calculator = PerformanceCalculator.Create(perf, _plays[perf.PlayID]);
             summaries.Add(new PerformanceSummary(
-                play.Name,
+                calculator.Play.Name,
                 perf.Audience,
-                AmountFor(perf, play),
-                VolumeCreditsFor(perf, play)));
+                calculator.Amount,
+                calculator.VolumeCredits));
         }
         return new StatementData(
             invoice.Customer,
@@ -44,41 +44,6 @@ public class StatementPrinter(Dictionary<string, Play> plays)
         }
         result += $"Amount owed is {(data.TotalAmount / 100m).ToString("C", cultureInfo)}\n";
         result += $"You earned {data.TotalVolumeCredits} credits\n";
-        return result;
-    }
-
-    private int AmountFor(Performance perf, Play play)
-    {
-        var result = 0;
-        switch(play.Type)
-        {
-            case "tragedy":
-                result = 40000;
-                if (perf.Audience > 30) {
-                    result += 1000 * (perf.Audience - 30);
-                }
-                break;
-            case "comedy":
-                result = 30000;
-                if (perf.Audience > 20) {
-                    result += 10000 + 500 * (perf.Audience - 20);
-                }
-                result += 300 * perf.Audience;
-                break;
-            default:
-                throw new Exception("unknown type: " + play.Type);
-        }
-        return result;
-    }
-
-    private int VolumeCreditsFor(Performance perf, Play play)
-    {
-        var result = 0;
-        result += Math.Max(perf.Audience - 30, 0);
-        if ("comedy" == play.Type) 
-        {
-            result += perf.Audience / 5;
-        }
         return result;
     }
 }
