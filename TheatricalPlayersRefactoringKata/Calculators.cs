@@ -19,6 +19,8 @@ public abstract class PerformanceCalculator(Performance perf, Play play)
                 return new TragedyCalculator(perf, play);
             case "comedy":
                 return new ComedyCalculator(perf, play);
+            case "historical":
+                return new HistoricalCalculator(perf, play);
             default:
                 throw new Exception("unknown type: " + play.Type);
         }
@@ -57,4 +59,22 @@ public class ComedyCalculator(Performance perf, Play play) : PerformanceCalculat
         }
     }
     public override int VolumeCredits => base.VolumeCredits + Perf.Audience / 5;
+}
+
+public class HistoricalCalculator(Performance perf, Play play) : PerformanceCalculator(perf, play)
+{
+    public override int Amount
+    {
+        get
+        {
+            var result = 50000;
+            if (Perf.Audience > 20)
+            {
+                result += 1500 * (Perf.Audience - 20);
+            }
+            return result;
+        }
+    }
+
+    public override int VolumeCredits => Perf.Audience / 5;
 }
