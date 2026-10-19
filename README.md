@@ -1,3 +1,5 @@
+# CS 4320 OC2: Refactoring
+
 ## Build and Test Instructions
 
 ### Tools and dependencies
@@ -5,6 +7,11 @@
 - macOS, using the terminal in Visual Studio Code
 - xUnit test framework (restored automatically by `dotnet test`; no manual installs)
 - Git, for the commit history
+
+## Part 1
+1. Comment and syntax errors: comment states "every ten comedy attendees," but the code divides by 5. Also, there is a stray semicolon at the end of the credits line.
+2. One method for calculating, tracking, and formatting: can be broken into several smaller functions to make the code cleaner and less confusing.
+3. Switch on play.Type: makes it difficult to add new play types, and the type is checked in two different places, so adding "historical" means finding and editing both.
 
 ### Commands
 From the repository root:
