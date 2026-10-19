@@ -80,3 +80,19 @@ These two tests passed against the original code (baseline commit `425de43`: tot
 - `HistoricalAtAudience35MatchesExample`: $725.00 and 7 credits, the example from the assignment
 - `HistoricalAtAudience20HasNoSurcharge`: boundary; $500.00 and 4 credits
 - `HistoricalAtAudience21AddsSurchargeForOnePerson`: boundary; $515.00 and 4 credits
+
+## Reflection
+    I believe the refactoring that improved the program the most was the Polymorphism stage. The earlier steps with extraction and splitting made it easier to read, but overall, the steps were still scattered. Before the change was made, the play type was checked in the switch for charges and again in a separate statement for credits. After the change, each play type has its own calculator class with both its charge and credit rules, and the type is checked in only one place. Then, I did not have to remember every spot that worried about the different play types. 
+    Refactoring and adding functionality are different because of their uses. Refactoring only changes the structure of the code while keeping the output the same, and the tests are what proved that. Through all of the refactoring steps, the expected output never changed, and I ran `dotnet test` after each one. Adding functionality changes what the overall program does, so it needs new tests for the new behaviors. Keeping them in separate commits made the difference visible in my history. The refactoring commits all say the tests are unchanged, and the historical commit is the first place that new functionality appears.
+    The new design helped a lot when I added historical plays. It took one new class, very similar to the others, and add one new case in the PerformanceCalculator. I did not have to touch the tragedy or comedy code. The one thing I had to think about was credits. The base class gives one credit per person beyond 30, but the historical rule is only one credit per five people, so HistoricalCalculator overrides VolumeCredits without calling the base version. If I had copied the comedy approach, the 35 person example given in the assignment would have given 12 credits instead of 7.
+    Many of the original maintainability issues were resolved. The one long method is now split into a calculation phase and a rendering phase. The scattered type checks are now down to one method. The "every ten" comment and the stray semicolon are now gone. Although the switch is still in place, the play type is now only checked once instead of in different places.
+
+## AI Statement
+I used Claude throughout the assignment to understand the starter code and Refactoring concepts, review my code for compile errors, set up .NET, suggest boundary test cases, and structure my README neatly.
+It gave me ideas for the calculator classes, and I put them in my project, tested, and adjusted. I worked out the expected values for my new tests by hand from the rules, ran all the tests myself, and made the commits. I understand the final design and can explain each change. 
+
+## Atribution
+Based on the Theatrical Players Refactoring Kata by Emily Bache
+(https://github.com/emilybache/Theatrical-Players-Refactoring-Kata),
+Modified by Ava Layton, October 19, 2026 
+Modifications: refactored `StatementPrinter` into separate calculation and rendering phases with per play type calculator classes, added boundary tests, and added a "historical" play type with tests.
