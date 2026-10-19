@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace TheatricalPlayersRefactoringKata;
 
@@ -10,22 +11,39 @@ public class StatementPrinter(Dictionary<string, Play> plays)
     
     public string Print(Invoice invoice)
     {
-        var totalAmount = 0;
-        var volumeCredits = 0;
-        var result = $"Statement for {invoice.Customer}\n";
-        CultureInfo cultureInfo = new("en-US");
+        var data = CreateStatementData(invoice);
+        return RenderPlainText(data);
+    }
 
-        foreach(var perf in invoice.Performances) 
+    private StatementData CreateStatementData(Invoice invoice)
+    {
+        var summaries = new List<PerformanceSummary>();
+        foreach (var perf in invoice.Performances)
         {
             var play = _plays[perf.PlayID];
-            var thisAmount = AmountFor(perf, play);
-            var volumeCredits = VolumeCreditsFor(perf, play);
-            // print line for this order
-            result +=$"  {play.Name}: {(thisAmount / 100m).ToString("C", cultureInfo)} ({perf.Audience} seats)\n";
-            totalAmount += thisAmount;
+            summaries.Add(new PerformanceSummary(
+                play.Name,
+                perf.Audience,
+                AmountFor(perf, play),
+                VolumeCreditsFor(perf, play)));
         }
-        result += $"Amount owed is {(totalAmount / 100m).ToString("C", cultureInfo)}\n";
-        result += $"You earned {volumeCredits} credits\n";
+        return new StatementData(
+            invoice.Customer,
+            summaries,
+            summaries.Sum(p => p.Amount),
+            summaries.Sum(p => p.VolumeCredits));
+    }
+
+    private static string RenderPlainText(StatementData data)
+    {
+        var cultureInfo = new CultureInfo("en-US");
+        var result = $"Statement for {data.Customer}\n";
+        foreach (var perf in data.Performances)
+        {
+            result += $"  {perf.PlayName}: {(perf.Amount / 100m).ToString("C", cultureInfo)} ({perf.Audience} seats)\n";
+        }
+        result += $"Amount owed is {(data.TotalAmount / 100m).ToString("C", cultureInfo)}\n";
+        result += $"You earned {data.TotalVolumeCredits} credits\n";
         return result;
     }
 
@@ -55,9 +73,12 @@ public class StatementPrinter(Dictionary<string, Play> plays)
 
     private int VolumeCreditsFor(Performance perf, Play play)
     {
-        // add volume credits
-        var result += Math.Max(perf.Audience - 30, 0);
-        // add extra credit for every five comedy attendees
-        if ("comedy" == play.Type) result += perf.Audience / 5;
+        var result = 0;
+        result += Math.Max(perf.Audience - 30, 0);
+        if ("comedy" == play.Type) 
+        {
+            result += perf.Audience / 5;
+        }
+        return result;
     }
 }
